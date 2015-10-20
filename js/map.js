@@ -1,6 +1,6 @@
 // Function to draw your map
 var drawMap = function(location, zoom) {
-
+console.log('DrawMap')
   // Create map and set view
 
 var map = L.map('mapContainer').setView(location, zoom)
@@ -17,7 +17,8 @@ var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png')
 }
 
 // Function for getting data
-var getData = function() {
+var getData = function(map) {
+	console.log('GetData')
 	$.ajax({
 		  url: "data/response.json",
 		  type: "get",
@@ -30,13 +31,14 @@ var getData = function() {
 }
 
 // Loop through your data and add the appropriate layers and points
-var customBuild = function() {
+var customBuild = function(data, map) {
 	var female = [];
 	var male =[];
-	var killed =[];
+	var kill =[];
 	var hit = [];
 	var seattle =[];
-
+	var all = [];
+console.log('customBuild')
 
 	data.map(function(dat) {	
 		var color;
@@ -49,11 +51,11 @@ var customBuild = function() {
 		var link = dat["Source Link"];
 
 		if (gender == "Female") {
-			color: red;
+			color: 'red';
 		}else {
-			color: blue;
+			color: 'blue';
 		}
-
+console.log('circlebuild')
 		var circle = new L.circleMarker([dat.lat, dat.lng], {
 			color: color}) 
 			
@@ -69,7 +71,7 @@ var customBuild = function() {
 			}if (state == undefined) {
 				d = "State unknown"
 			}else {
-				d = "State: " + State;
+				d = "State: " + state;
 			}if (summary == undefined) {
 				d = "No Summary";
 			}else {
@@ -88,12 +90,27 @@ var customBuild = function() {
 				d = "Gender: " + gender;
 			}
 	
-		circle.bindPopup(d)
+		circle.bindPopup(d);
 
-		if(gender == )
-	}
+		if(gender == "female" || gender =="Female") {
+			female.push(circle);
+		}else {
+			male.push(circle);
+		}
 
-	
+		if(killed == "Killed" || killed == "killed") {
+			kill.push(circle);
+		}else {
+			hit.push(circle);
+		}
+		all.push(circle);
+	});
+
+var allMap = L.layerGroup(all);
+var males = L.LayerGroup(male);
+var females = L.LayerGroup(female);
+var died = L.LayerGroup(kill);
+var hits = L.LayerGroup(hit);
 
 		// Once layers are on the map, add a leaflet controller that shows/hides layers
   
