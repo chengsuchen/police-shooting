@@ -1,6 +1,5 @@
 // Function to draw your map
 var drawMap = function(location, zoom) {
-console.log('DrawMap')
   // Create map and set view
 
 var map = L.map('mapContainer').setView(location, zoom)
@@ -18,7 +17,6 @@ var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png')
 
 // Function for getting data
 var getData = function(map) {
-	console.log('GetData')
 	$.ajax({
 		  url: "data/response.json",
 		  type: "get",
@@ -38,7 +36,10 @@ var customBuild = function(data, map) {
 	var hit = [];
 	var seattle =[];
 	var all = [];
-console.log('customBuild')
+	var maleKilled = 0;
+	var maleHit = 0;
+	var femaleKilled =0;
+	var femaleHit = 0;
 
 	data.map(function(dat) {	
 		var color;
@@ -50,44 +51,71 @@ console.log('customBuild')
 		var killed = dat["Hit or Killed?"];
 		var link = dat["Source Link"];
 
-		if (gender == "Female") {
-			color: 'red';
+		if (killed == "killed" || killed == "Killed") {
+			color = 'red';
 		}else {
-			color: 'blue';
+			color = 'blue';
 		}
-console.log('circlebuild')
-		var circle = new L.circleMarker([dat.lat, dat.lng], {
-			color: color}) 
+
+		if(gender == "Male" && (killed == "killed" || killed == "Killed")) {
+				maleKilled++;
+		}
+		if(gender =="Male" && (killed == "hit" || killed =="Hit")) {
+			maleHit++;
+		}
+		if(gender == "Female" && (killed == "killed" || killed =="Killed")) {
+			femaleKilled++;
+		}
+		if(gender == "Female" && (killed == "hit" || killed =="Hit")) {
+			femaleHit++;
+		}
+		if(gender == "male" && (killed == "killed" || killed == "Killed")) {
+				maleKilled++;
+		}
+		if(gender =="male" && (killed == "hit" || killed =="Hit")) {
+			maleHit++;
+		}
+		if(gender == "female" && (killed == "killed" || killed =="Killed")) {
+			femaleKilled++;
+		}
+		if(gender == "female" && (killed == "hit" || killed =="Hit")) {
+			femaleHit++;
+		}
+
+	var circle = new L.circleMarker([dat.lat, dat.lng], {
+			radius: (age % 20),
+			color:color
+		});
 			
 			var d;
 			if(name == undefined) {
-					d ="Name Unknown";
+					d ="Name Unknown ";
 			}else {
-				d = "Name: " + name;
+				d = "Name: " + name + "	";
 			}if(age == undefined) {
-				d = "Age unknown";
+				d =  d + "Age unknown ";
 			}else {
-				d = "Age: " + age;
+				d = d + "Age: " + age+ " ";
 			}if (state == undefined) {
-				d = "State unknown"
+				d = "State unknown "
 			}else {
-				d = "State: " + state;
+				d = d + "State: " + state+ " ";
 			}if (summary == undefined) {
-				d = "No Summary";
+				d = d+ "No Summary ";
 			}else {
-				d = "Summary: " + summary
+				d = d+ "Summary: " + summary+ " "
 			}if (killed == undefined) {
-				d = "Unknown Cause";
+				d = d+"Unknown Cause ";
 			}else {
-				d = "Hit or Killed: " + killed
+				d = d+"Hit or Killed: " + killed + " "
 			}if (link == undefined) {
-				d = "No Source"; 
+				d = d + "No Source"; 
 			}else {
-				d = "Source: " + link;
+				d = d+ "Source: " + link+ " ";
 			}if (gender == undefined) {
-				d = "Unknown Gender";
+				d = d+ "Unknown Gender";
 			}else {
-				d = "Gender: " + gender;
+				d = d+ "Gender: " + gender;
 			}
 	
 		circle.bindPopup(d);
@@ -107,12 +135,31 @@ console.log('circlebuild')
 	});
 
 var allMap = L.layerGroup(all);
-var males = L.LayerGroup(male);
-var females = L.LayerGroup(female);
-var died = L.LayerGroup(kill);
-var hits = L.LayerGroup(hit);
+var males = L.layerGroup(male);
+var females = L.layerGroup(female);
+var died = L.layerGroup(kill);
+var hits = L.layerGroup(hit);
 
-		// Once layers are on the map, add a leaflet controller that shows/hides layers
-  
+
+
+var genderGroup = {
+	"Females": females,
+	"Males": males
+}
+
+var survivalGroup = {
+	"Killed": died,
+	"Hit": hits
+}
+
+L.control.layers(genderGroup, survivalGroup).addTo(map);
+allMap.addTo(map);
+
+
+document.getElementById("maleKilled").innerHTML = maleKilled;
+document.getElementById("maleHit").innerHTML = maleHit;
+ document.getElementById("femaleKilled").innerHTML = femaleKilled; 
+ document.getElementById("femaleHit").innerHTML = femaleHit; 
+
 }
 

@@ -1,5 +1,21 @@
 
 /* You'll probably want to add some styles here */
-#container {
+#mapContainer {
 	height:800px;
+}
+
+#table {
+	text-align: center;
+}
+
+body{
+	font-size: 16px;
+}
+
+th{
+	text-align: center;
+}
+
+a{
+	color: blue;
 }
