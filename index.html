@@ -13,24 +13,27 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     
     <!-- leaflet libraries -->
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+
 
     <!-- Custom files -->
     <script type="text/javascript" src="js/map.js"></script>
     <link rel="stylesheet" href="css/main.css"/>
-   
+
+    <title>Police Shootings</title>
+
   </head>
+  
   <body>
     <!-- You may want to put your title and additional informaiton here -->
-    <div class="container">
+   <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+    <div class="container" id ="mapContainer">
       <!-- This is the div that your map will go in.  You'll need to reference its id -->
-      <div id="container"></div>
-    </div>
-    <script>
-      
+          <script>     
       // This is where you should execute your drawMap function
-      
+        drawMap([47.4097, -122.3331], 8)
+  
     </script>
+        </div>
   </body>
 </html>
